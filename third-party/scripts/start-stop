@@ -1,0 +1,46 @@
+#!/bin/sh
+# SAMPLE BASIC INIT SCRIPT
+#
+# Below is the chkconfig syntax for auto startup at different run levels
+# Note runlevel 1 2 and 3, 69 is the Start order and 68 is the Stop order
+# Make sure these are unique by looking into /etc/rc.d/*
+# Also below is the description which is necessary.
+#
+# chkconfig: 123 69 68
+# description: Description of the Service
+#
+# Below is the source function library
+#
+. /etc/init.d/functions
+#
+#
+# Below is the Script Goodness controlling the service
+#
+start() {
+    my_dir=$(dirname $0)
+    $my_dir/flume-ng-agent "$1" &
+}
+
+stop() {
+    kill -- -`ps fj |grep flume-ng-agent | grep "$1" | grep -v grep | awk '{print $3}'`
+}
+
+
+case "$1" in
+start)
+	# start <agentName>
+	start "$2"
+	;;
+stop)
+	stop "$2"
+	;;
+restart)
+	stop "$2"
+	start "$2"
+	;;
+*)
+echo "Usage: $0 {start|stop|restart} <agentName>"
+exit 1
+;;
+esac
+exit 0

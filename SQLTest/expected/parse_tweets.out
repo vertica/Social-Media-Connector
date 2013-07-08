@@ -1,0 +1,305 @@
+\set datafile '\''`echo $PACKAGE_SQLTEST`'/data/sample_tweets.json\''
+create table tweets(created_at varchar(144), "user.name" varchar(144), "user.screen_name" varchar(144), text varchar(500), retweet_count int, "user.location" varchar(144), "coordinates.coordinates.0" numeric, "coordinates.coordinates.1" float, lang varchar(5));
+
+copy tweets from local :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select created_at from tweets order by created_at;
+           created_at           
+--------------------------------
+ Wed Jan 09 18:41:39 +0000 2013
+ Wed Jan 09 18:41:39 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:40 +0000 2013
+ Wed Jan 09 18:41:41 +0000 2013
+ Wed Jan 09 18:41:42 +0000 2013
+ 
+(29 rows)
+
+
+select retweet_count from tweets order by created_at;
+ retweet_count 
+---------------
+             0
+            10
+             0
+             0
+             0
+             3
+             0
+             0
+             0
+             0
+             0
+             0
+             0
+             8
+             0
+             0
+             5
+             0
+             0
+             0
+             0
+             0
+             0
+             0
+             0
+             0
+             0
+             0              
+              
+(29 rows)
+
+
+select "user.location" from tweets where "user.location" is not NULL AND "user.location" <> '' order by created_at;
+        user.location         
+------------------------------
+ with Louis
+ Las Vegas
+ Charata-Chaco-Argentina... 
+ Entre la estaca y la pared.
+ Madrid/España - Caracas/Vzla
+ New Jersey
+  Sophied Caentano e Channel 
+ Rio de Janeiro
+ Windsor, Ontario
+ error 404 not found
+ somewhere u not ♡ 
+ 289D6DC6
+ 二次幼女の足の裏
+ ekaterinburg
+ San Antonio, Texas
+(15 rows)
+
+
+select "coordinates.coordinates.0", "coordinates.coordinates.1" from tweets where "coordinates.coordinates.0" is not NULL ORDER BY created_at;
+ coordinates.coordinates.0 | coordinates.coordinates.1 
+---------------------------+---------------------------
+           60.603944880000000 |          56.84730296
+         -98.389458540000007 |          29.51013636
+(2 rows)
+
+drop table tweets;
+
+
+-- VER-27183
+create table tweets(created_at varchar(144), "user.name" varchar(144), "user.screen_name" varchar(144), text varchar(500), retweet_count varchar, "user.location" varchar(144), "coordinates.coordinates.0" numeric, "coordinates.coordinates.1" float, lang varchar(5)); 
+
+copy tweets from :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select retweet_count from tweets order by created_at;
+ retweet_count 
+---------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+(29 rows)
+
+-- VER-27139
+copy tweets from :datafile parser TweetParser() returnrejected;
+ Rejected 
+----------
+        7
+       31
+(2 rows)
+
+drop table tweets;
+
+-- VER-27263
+create table tweets(id varchar, created_at int, "user.name" int, "user.screen_name" int, text int, retweet_count varchar, "user.location" int, "coordinates.coordinates.0" varchar, "coordinates.coordinates.1" varchar, lang int); 
+
+copy tweets from :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select * from tweets;
+ id | created_at | user.name | user.screen_name | text | retweet_count | user.location | coordinates.coordinates.0 | coordinates.coordinates.1 | lang 
+----+------------+-----------+------------------+------+---------------+---------------+---------------------------+---------------------------+------
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+    |            |           |                  |      |               |               |                           |                           |     
+(29 rows)
+
+drop table tweets;
+
+-- VER-27302
+create table tweets(created_at timestamp without timezone, "user.name" varchar(144), "user.screen_name" varchar(144), text varchar(500), retweet_count int, "user.location" varchar(144), "coordinates.coordinates.0" numeric, "coordinates.coordinates.1" float, lang varchar(5));
+
+copy tweets from :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select * from tweets order by created_at;
+     created_at      |      user.name       | user.screen_name |                                                                     text                                                                     | retweet_count |        user.location         | coordinates.coordinates.0 | coordinates.coordinates.1 | lang 
+---------------------+----------------------+------------------+----------------------------------------------------------------------------------------------------------------------------------------------+---------------+------------------------------+---------------------------+---------------------------+------
+                     |                      |                  |                                                                                                                                              |               |                              |                           |                           | 
+ 2013-01-09 13:41:39 | I need you boo       | touchtheirhands  | http://t.co/CaG8W5lq                                                                                                                         |             0 | with Louis                   |                           |                           | und
+ 2013-01-09 13:41:39 | keth                 | dustineira       | @rememberdiley segui                                                                                                                         |            10 |                              |                           |                           | pt
+ 2013-01-09 13:41:40 | 0                    | yrydaqoxor       | http://t.co/YWAzSBVt играть в звездные войны войны клонов онлайн бесплатно                                                                   |             0 |                              |                           |                           | ru
+ 2013-01-09 13:41:40 | Caitlin Clifford     | Caitlin_jc       | #stressed #tests #18soon                                                                                                                     |             0 |                              |                           |                           | en
+ 2013-01-09 13:41:40 | Faiz Aux™♞           | faizaux          | Dk ule lgu tulo,srabuk peruk la ak                                                                                                           |             0 |                              |                           |                           | id
+ 2013-01-09 13:41:40 | Jared Espiritu       | esp_jay          | @ImUhBeaner donuts it is !                                                                                                                   |             3 | Las Vegas                    |                           |                           | nl
+ 2013-01-09 13:41:40 | Jose.M.Fernandez     | JoseManuelWilly  | Faaaaaaaaaaaaaaaaaa                                                                                                                          |             0 | Charata-Chaco-Argentina...   |                           |                           | en
+ 2013-01-09 13:41:40 | Julito               | 1terrestar1      | RT @MorirporQuerer: #CosasQueOdio Que un 'Te quiero' se conteste con un 'y yo'.                                                              |             0 | Entre la estaca y la pared.  |                           |                           | es
+ 2013-01-09 13:41:40 | Khiana Christine     | khianachristine  | @Si_Seduisant lol I have to see you at some pointttt.                                                                                        |             0 |                              |                           |                           | en
+ 2013-01-09 13:41:40 | Licée Français LXII  | angelaa_reyees   | Haha, algo así @He_Lesh ntt; me desperto el Osotoniel ☹ *mi perro*                                                                           |             0 |                              |                           |                           | es
+ 2013-01-09 13:41:40 | Miguel Ferrari       | ferrarimiguel    | RT @OSWALSANTANA: @AMAZINGBARBARA @bettyhass @IvetteDominguez @GrupoF3B @ferrarimiguel @tonnyvi  #Nominad@s Premios @udelespectaculo         |             0 | Madrid/España - Caracas/Vzla |                           |                           | id
+ 2013-01-09 13:41:40 | Mitz Gutiérrez       | mitz1507         | RT @cosmoespanol: Feliz cumpleaños 31 a #KateMiddleton, quien tuvo un alucinante 2012 y este año se convertirá en madre. ¡Qué emoción! h ... |             0 |                              |                           |                           | es
+ 2013-01-09 13:41:40 | Natalie              | Natalie_Lavrov   | RT @maevelynchh: HAHA remember freshman year walking to the buses and @MaggieEhrola fell wearing a skirt in front of the seniors 😂😂 #lov ... |             0 | New Jersey                   |                           |                           | en
+ 2013-01-09 13:41:40 | Sele Fernandez       | selefernandez3   | necesito hablar yayayayya con agustina                                                                                                       |             8 |                              |                           |                           | es
+ 2013-01-09 13:41:40 | SophiEd Is Eternal   | CoracaoSophied_  | @ThiagoDms_ Olha a DM Thi por favoor #LançamentoHenriqueRocha19deJaneiro                                                                     |             0 |  Sophied Caentano e Channel  |                           |                           | pt
+ 2013-01-09 13:41:40 | Thales Tardelli      | insiraumuser     | hahahahahahhahaha                                                                                                                            |             0 | Rio de Janeiro               |                           |                           | is
+ 2013-01-09 13:41:40 | Tim Doermer          | TimDoermer       | RT @ashlouz: Buying textbooks, sorry in advance bank account #poorstudentproblems                                                            |             5 | Windsor, Ontario             |                           |                           | en
+ 2013-01-09 13:41:40 | abdullah al-nijumi   | zaq98765         | RT @Sami_Alhomood: (صورة)بقالة في حايل:
+ما أجمل أن نتفقد المحتاجين والضعفاء.
+صح في الحديث:"ابغوني الضعفاء،فإنما ترزقون وتنصرون بضعفائكم" ... |             0 |                              |                           |                           | ar
+ 2013-01-09 13:41:40 | logynraybuck         | Logynraybuck     | I hate you #howsthatforfunny                                                                                                                 |             0 |                              |                           |                           | en
+ 2013-01-09 13:41:40 | oh la la bela        | whybela          | juro q to com mt medo de abrir meu ask                                                                                                       |             0 | error 404 not found          |                           |                           | pt
+ 2013-01-09 13:41:40 | stephania∞           | stephyy_trill23  | RT @ItsLifeFact: People come and go. But life is simply about seeing who cares enough to stay.                                               |             0 |                              |                           |                           | en
+ 2013-01-09 13:41:40 | stop tweet watchin ♡ | CeeCiana         | RT @BeautyyNBrains: If you can go a day without at LEAST texting me than I must not be that important.                                       |             0 | somewhere u not ♡            |                           |                           | en
+ 2013-01-09 13:41:40 | مساعد الفودري        | flflc6           | وقفـــت لعيـــونك علــى طول طولي ودقــات قلبــي تنحـــني حب لرضاك                                                                            |             0 | 289D6DC6                     |                           |                           | ar
+ 2013-01-09 13:41:40 | ▲Boss▲               | CoreaElaineXOXO  | RT @tokenbiracial: I'm the friendliest anti-social person you'll ever meet.                                                                  |             0 |                              |                           |                           | en
+ 2013-01-09 13:41:40 | あべ氏               | abesheeee        | 【定期】 マンガ大好き！　最近は４コマにはまり中　おすすめあったら教えてね                                                                    |             0 | 二次幼女の足の裏             |                           |                           | ja
+ 2013-01-09 13:41:40 | くーら               | Kula_sky         | やらなきゃいかんこと忘れとってPC起動。露骨に切ない。                                                                                         |             0 |                              |                           |                           | ja
+ 2013-01-09 13:41:41 | Старченко Владислав  | DjVLD            | @gordeev_slava не про нее речь😂                                                                                                              |             0 | ekaterinburg                 |        60.603944880000000 |               56.84730296 | ru
+ 2013-01-09 13:41:42 | Queen Wizard         | kassieisawalrus  | “@DigBickNick: Pizza” I want.                                                                                                                |             0 | San Antonio, Texas           |       -98.389458540000007 |               29.51013636 | it
+(29 rows)
+
+drop table tweets;
+
+-- VER-27318
+create table tweets(id int, id_str varchar);
+copy tweets from :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select * from tweets where not id=id_str;
+ id | id_str 
+----+--------
+(0 rows)
+
+drop table tweets;
+
+-- VER-27358
+create table tweets(
+id int,
+created_at timestamptz,
+"user.name" varchar(144),
+"user.screen_name" varchar(144),
+text varchar(500),
+"retweeted_status.retweet_count" int,
+"retweeted_status.id" int,
+"retweeted_status.favorite_count" int,
+"user.location" varchar(144),
+"coordinates.coordinates.0" float,
+"coordinates.coordinates.1" float,
+"entities.hashtags.hashtags.0" VARCHAR(144),
+"entities.hashtags.hashtags.1" VARCHAR(144),
+"entities.0.hashtags.0" VARCHAR(144),
+lang varchar(5)
+); 
+copy tweets from :datafile parser TweetParser();
+ Rows Loaded 
+-------------
+          29
+(1 row)
+
+select id from tweets where not "entities.hashtags.hashtags.0" is null;
+ id 
+----
+(0 rows)
+
+select id from tweets where not "entities.0.hashtags.0" is null;
+ id 
+----
+(0 rows)
+
+drop table tweets;
