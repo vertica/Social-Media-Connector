@@ -1,29 +1,37 @@
-all: scons jsoncpp jdk
+all: scons jsoncpp 
 
-.PHONY: all scons jsoncpp jdk
+.PHONY: all scons jsoncpp 
 
 THIRD_PARTY = $(shell pwd)
 INSTALL_DIR = $(THIRD_PARTY)/install
 
-SCONS_DIR = $(THIRD_PARTY)/scons
-SCONS_TBZ = $(SCONS_DIR)/scons-local-2.1.0.tar.gz
-SCONS_SRC = $(SCONS_DIR)/scons-local-2.1.0
-SCONS = $(SCONS_DIR)/scons.py
+
+#
+#  Location of OSS software distributions
+#
+  
+DIST_DIR    = $(THIRD_PARTY)/dist
+SCONS_TBZ   = $(DIST_DIR)/scons-local-2.3.0.tar.gz
+JSONCPP_TBZ = $(DIST_DIR)/jsoncpp-src-0.6.0-rc2.tar.gz
+JDK_DIR     = $(DIST_DIR)/jdk1.6.0_11
+FLUME_TGZ   = $(DIST_DIR)/apache-flume-1.3.1-bin.tar.gz
+
+SCONS_DIR   = $(THIRD_PARTY)/scons
+SCONS_SRC   = $(SCONS_DIR)/scons-2.3.0
+SCONS       = $(SCONS_DIR)/scons.py
 SCONS_EXTRA = $(SCONS_DIR)/sconsign.py $(SCONS_DIR)/scons-LICENSE $(SCONS) $(SCONS_DIR)/scons-README $(SCONS_DIR)/scons-time.py
 
 JSONCPP_DIR = $(THIRD_PARTY)/jsoncpp
-JSONCPP_TBZ = $(JSONCPP_DIR)/jsoncpp-src-0.6.0-rc2.tar.gz
 JSONCPP_SRC = $(JSONCPP_DIR)/jsoncpp-src-0.6.0-rc2
 
-JDK_DIR = $(THIRD_PARTY)/jdk1.6.0_11
-JDK_TBZ = $(THIRD_PARTY)/jdk1.6.0_11.tar.gz
+THIRD_PARTY_DISTRIBUTIONS = $(JSONCPP_TBZ) $(SCONS_TBZ)
 
 scons: $(SCONS_DIR)/.done
 jsoncpp: $(JSONCPP_DIR)/.done
-jdk: $(JDK_DIR)/.done
 
 $(SCONS_DIR)/.done:
 	@echo "Unpacking, configuring and installing scons...";
+	mkdir -p $(SCONS_DIR)
 	(cd $(SCONS_DIR); tar xzf $(SCONS_TBZ))
 	touch $@
 
@@ -38,15 +46,10 @@ $(JSONCPP_DIR)/.done: $(SCONS_DIR)/.done
 	(cd $(JSONCPP_SRC); cp -r include/* $(INSTALL_DIR)/include)
 	touch $@
 
-$(JDK_DIR)/.done: 
-	@echo "Unpacking and installing jdk 1.6...";
-	(tar xzf $(JDK_TBZ))
-	touch $@
-
 clean:
 	find . -name ".done" -exec rm -rf {} \;
 	rm -rf $(INSTALL_DIR)
-	rm -rf $(SCONS_SRC)
+	rm -rf $(SCONS_DIR)
 	rm -rf $(JSONCPP_SRC)
-	rm -rf $(JDK_DIR)
 	rm -f $(SCONS_EXTRA)
+

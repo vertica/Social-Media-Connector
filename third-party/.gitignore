@@ -1,0 +1,5 @@
+dist
+scons
+install
+.done
+jsoncpp-src*
