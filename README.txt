@@ -12,10 +12,10 @@ Third-party Dependencies:
 
     Flume:
         Project homepage:  http://flume.apache.org/
-        Required package:  
+        Required package:  apache-flume-1.3.1-bin.tar.gz
 
     JDK:
-        Project homepage:
+        Project homepage:  http://www.oracle.com/technetwork/java/javase/downloads/index.html
         Required package:  jdk-6u11-linux-x64.bin
 
 Prepare the third-party software:
@@ -25,5 +25,12 @@ Prepare the third-party software:
         sh ./jdk-6u11-linux-x64.bin
             (you will need to accept the license agreement)
 3.  In the third-party directory type 'make'
+
+
+Build Social Media Connector (assuming you've built the third-party software
+already...)
+
+1.  make
+
 
 
