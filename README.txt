@@ -1,5 +1,3 @@
-Download to dist:
-
 Third-party Dependencies:
     JSONCpp:    
         Required package:   jsconcpp-src-0.6.0-rc2.tar.gz

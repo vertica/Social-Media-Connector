@@ -36,6 +36,9 @@ The HP Vertica Social Media Connector requires the following:
 
 * HP Vertica Version 6.1.2 - For platform requirements see: [Platform Requirements](http://my.vertica.com/docs/6.1.x/HP_Vertica_EE_6.1.x_Supported_Platforms.pdf)
 * Oracle Open Java JDK 1.6
+* Apache Flume 1.3.1
+* JSONCpp 0.6.0 RC2
+* SCONS Local 2.3.0
 * Build Tools:
 	* gcc
 	* gcc-c++
@@ -90,6 +93,9 @@ You must edit the Flume configuration file and provide details for your Twitter 
 
 Building and Installing
 -----------------------
+
+## Retrieving and Building the Third-Party Software **
+
 You must build flume from source. The Flume source is provided in this repository. However, Flume requires Oracle Open JDK 1.6, which you must download from  Oracle. Verify that the JDK bin directory is in your path before building or the build fails. For example:
 `export PATH=$PATH:/usr/java/jdk1.6.0_11/bin/`
 
