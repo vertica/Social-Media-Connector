@@ -1,2 +1,9 @@
-ignorables/*
+build
+dist
+export_revision
+lib
+rpmbuild/BUILD/
+rpmbuild/RPMS/
+rpmbuild/SOURCES/
+rpmbuild/SRPMS/
 
