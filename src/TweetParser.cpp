@@ -1,3 +1,5 @@
+/*    Copyright 2013 Vertica, an HP Company */
+
 #include "Vertica.h"
 using namespace Vertica;
 
