@@ -123,6 +123,9 @@ You must match the column name in your table to the field name that Twitter prov
 
 If the tweet does not contain the data for a defined column, or the column name and/or type is incorrect, then NULL is loaded for that column.
 
+Note that although tweets are limited to 140 characters, characters are not the same as bytes. Some tweets may contain multi-byte characters. To account for this, create the column for your tweet text field with enough bytes to handle multi-byte characters. For example:
+`text varchar(500)`
+
 ### Fields with Sub-fields
 
 Some Twitter fields have multiple sub-fields, which in turn can have additional sub-fields. For example, the **user** field has sub-fields for _name_, _screen_name_, and _location_ (in addition to [many others](https://dev.twitter.com/docs/platform-objects/users)). To create columns to store these subfields, you name the column with a "." separating the field and sub-field names, For example:
@@ -180,6 +183,12 @@ It is also useful to capture the _lang_ field, so you can easily filter tweets b
 
 `lang varchar(5)`
 
+### Retweeted Statuses and Truncation
+Tweets are limited to 140 characters. Some Twitter users add text to tweets that they are re-tweeting. If the user's additional text and the retweeted text result in more than 140 characters, then the re-tweeted text is truncated. However, you can still obtain the full text of the original tweet by capturing the retweeted_status.text field. Create your table with the following column to obtain the full text of the original tweet:
+
+`"retweeted_status.text" varchar(500)`
+
+
 ### Example of a basic table to store tweets:
 The following is a sample table definition that captures most of the basic information available in the data returned by Flume.
 ```
@@ -192,6 +201,7 @@ create table tweets(
 	"retweeted_status.retweet_count" int,
 	"retweeted_status.id" int,
 	"retweeted_status.favorite_count" int,
+	"retweeted_status.text" varchar(500),
 	"user.location" varchar(144),
 	"coordinates.coordinates.0" float,
 	"coordinates.coordinates.1" float,
@@ -234,7 +244,7 @@ Troubleshooting
 
 ### Testing TweetParser()
 
-You can test TweetParser() by manually calling it with the name of one of the data files downloaded by Flume. For example:
+You can test TweetParser() by manually calling it in vsql with the name of one of the data files downloaded by Flume. For example:
 
 `copy tweets from '/home/dbadmin/1370634848147-1' parser TweetParser();`
 
@@ -249,4 +259,6 @@ The Flume log rolls over when it reaches a certain size and the old log is gzipp
 
 You can modify your flume config file by editing `dist/apache-flume-1.3.1-bin/conf/flume.conf`. You do not need to restart Flume. Flume automatically picks up the changes in your flume.conf file after a short interval. Consult the flume.log file to verify the changes were valid and were applied. Note that if you rebuild Flume, then the flume.conf file from `third-party/conf` is copied over the flume.conf in `dist/apache-flume-1.3.1-bin/conf/flume.conf`.
 
+### Malformed Tweets
+If tweets come in malformed, or are malformed in a tweet file that you are importing directly using TweetParser() in vsql, then the malformed tweets are not loaded into Vertica. The tweets that are not loaded are logged in the `CopyErrorLogs` directory, for example: `/home/dbadmin/exampledb/catalog/exampledb/v_exampledb_node0004_catalog/CopyErrorLogs/`
 
