@@ -12,11 +12,11 @@ Third-party Dependencies:
 
     Flume:
         Project homepage:  http://flume.apache.org/
-        Required package:  apache-flume-1.3.1-bin.tar.gz
+        Required package:  apache-flume-1.3.1-bin.tar.gz (available in the archive repository)
 
     JDK:
         Project homepage:  http://www.oracle.com/technetwork/java/javase/downloads/index.html
-        Required package:  jdk-6u11-linux-x64.bin
+        Required package:  jdk-6u11-linux-x64.bin (available under Previous Releases)
 
 Prepare the third-party software:
 1.  Download each of the required packages to the third-party/dist directory.
