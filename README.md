@@ -46,6 +46,40 @@ The HP Vertica Social Media Connector requires the following:
 	* Any Dependencies on the above
 * A (free) Twitter Developer account
 
+
+Obtain Third-party Dependencies
+-------------------------------
+* JSONCpp:
+        Required package: jsconcpp-src-0.6.0-rc2.tar.gz
+        Project Homepage: http://sourceforge.net/projects/jsoncpp/
+        Note:
+            The latest "released" version of this project is 0.5.0. 0.6.0rc2
+            can be found under the 'Files' tab on the project homepage.
+
+* SCONS:
+        Required package: scons-local-2.3.0-tar.gz
+        Project homepage: http://www.scons.org/download.php
+        Note:
+            The local package is required. The base package is not supported.
+
+* Flume:
+        Project homepage: http://flume.apache.org/
+        Required package: apache-flume-1.3.1-bin.tar.gz
+
+* JDK:
+        Project homepage: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+        Required package: jdk-6u11-linux-x64.bin
+
+Prepare Third-party Software
+----------------------------
+1. Make a `dist` directory in `Social-Media-Connector/third-party`.
+1. Copy each of the required packages to the third-party/dist directory. Do not unzip or untar the packages.
+2. Expand the jdk-6u11 package
+        cd dist
+        sh ./jdk-6u11-linux-x64.bin
+            (you will need to accept the license agreement)
+3. In the third-party directory type `make`.
+
 Configuring Your Twitter Account
 ---------------------------------
 You must first configure an _application_ in your Twitter account before you can build and install the HP Vertica Social Media Connector. The application connection allows your Social Media Connector to connect to Twitter using your Twitter credentials and access the Twitter Streaming API.
@@ -82,7 +116,7 @@ You must edit the Flume configuration file and provide details for your Twitter 
 	* Ommitting both _keywords_ and _follow_ settings results in getting the Twitter **firehose**, which is a 1 percent random sampling of all tweets being tweeted.
 4. You can set `TwitterAgent.sources.Twitter.logging` to true to log the text of each tweet in the log file. However, setting this to true can rapidly fill your disk with log messages. Setting to false still logs normal operation of flume.
 5. Provide values for the following flume sink parameters:
-	* `TwitterAgent.sinks.Vertica.directory` - The location to save the text files from flume as they arrive. The user who runs the flume process must have write access to this location. If you omit this directory, then a Java exception occurs "Directory may not be null".
+	* `TwitterAgent.sinks.Vertica.directory` - The location to save the text files from flume as they arrive. The user who runs the flume process must have write access to this location. If you omit this directory, then a Java exception occurs "Directory may not be null". By default this is set to a directory named `files` inside of `Social-Media-Connector`. You must create this directory.
 	* `TwitterAgent.sinks.Vertica.rollInterval` - The number of seconds between batches. Used in conjunction with below, whichever occurs first causes an output file to be written. The default is 10 seconds.
 	* `TwitterAgent.sinks.Vertica.batchSize` - The number of tweets between each batch. The default is 10,000 tweets.
 	* `TwitterAgent.sinks.Vertica.VerticaHost` - hostname or IP address if the host running an HP Vertica Server.
@@ -94,16 +128,12 @@ You must edit the Flume configuration file and provide details for your Twitter 
 Building and Installing
 -----------------------
 
-## Retrieving and Building the Third-Party Software **
-
-You must build flume from source. The Flume source is provided in this repository. However, Flume requires Oracle Open JDK 1.6, which you must download from  Oracle. Verify that the JDK bin directory is in your path before building or the build fails. For example:
-`export PATH=$PATH:/usr/java/jdk1.6.0_11/bin/`
+Flume requires Oracle Open JDK 1.6, which you downloaded from Oracle. Verify that the JDK bin directory is in your path before building or the build fails. To add it to your path:
+`export PATH=$PATH:/home/dbadmin/Social-Media-Connector/third-party/dist/jdk1.6.0_11/bin`
 
 Navigate to the top level directory of the Social Media Connector and run: 'make flume'
 
-After the build completes, you can run 'make install' if the HP Vertica database exists on the same host and you are logged in as a dbadmin user.
-
-Otherwise, copy the VTweetParser.so file over to your Vertica node and install the library:
+After the build completes, run 'make install' if the HP Vertica database exists on the same host and you are logged in as a dbadmin user. Otherwise, copy the VTweetParser.so file over to your Vertica node and install the library:
 ```
 SELECT set_config_parameter('UseLongStrings', 1);
 CREATE LIBRARY VTweetLib AS /path/to/VTweetParser.so;
@@ -241,6 +271,15 @@ When querying tweet tables, it is useful to filter on the lang attribute so that
 
 Troubleshooting
 ----------------
+
+### Proxy Server
+
+If you must use a proxy server to connect to Twitter, then edit 'Social-Media-Connector/dist/apache-flume-1.3.1-bin/flume-ng-agent' and add the following arguments:
+
+* `-Dtwitter4j.http.proxyHost=_host_` 
+* `-Dtwitter4j.http.proxyPort=_port_`
+* `-Dtwitter4j.http.proxyUser=_username_` (if required)
+* `-Dtwitter4j.http.proxyPassword=_password_` (if required)
 
 ### Testing TweetParser()
 
