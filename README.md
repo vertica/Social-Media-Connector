@@ -28,7 +28,7 @@ Overview
 --------
 The HP Vertica Social Media Connector includes [Apache Flume](http://flume.apache.org) with an HP Vertica Plugin, and an [HP Vertica](http://vertica.com) User Defined eXtension (TweetParser). This suite allows you to continuously download tweets from [Twitter](http://twitter.com) through Flume and automatically load them over JDBC into an HP Vertica Database using TweetParser(). TweetParser() is called automatically by the Flume process so no user intervention is required to load tweets in the database once you start the Flume. 
 
-You can configure Flume to search for specific keywords, read tweets from a specific Twitter user, get the Twitter _Firehose_ (a random sample of 1% of all tweets). Flume downloads the tweets to a series of files. As the files are saved, TweetParser() uploads the contents of the file to the HP Vertica Database.
+You can configure Flume to search for specific keywords, read tweets from a specific Twitter user, get the Twitter _Firehose_ (a random sample of 1 percent of all tweets). Flume downloads the tweets to a series of files. As the files are saved, TweetParser() uploads the contents of the file to the HP Vertica Database.
 
 Requirements
 ------------
@@ -79,7 +79,7 @@ You must edit the Flume configuration file and provide details for your Twitter 
 3. Specify `TwitterAgent.sources.Twitter.keywords` and/or `TwitterAgent.sources.Twitter.follow`: 
 	* If you specify the _keywords_ value, then Flume returns tweets that contain those keywords. If you want to use hashtags, omit the # sign from the word. Use a comma separated list. For example: hockey, stanley cup, playoffs
 	* If you specify the _follow_ value, then Flume returns tweets from those users. User a comma separated list of screen names.If you specify _follow_, and _keywords_ is not assigned a value, then you get all tweets from the user(s). If _keywords_ is also defined, then you  get tweets from the user(s) defined in _follow_, and tweets from ***all*** users that contain the keywords in _keywords_.
-	* Ommitting both _keywords_ and _follow_ settings results in getting the Twitter **firehose**, which is a 1% random sampling of all tweets being tweeted.
+	* Ommitting both _keywords_ and _follow_ settings results in getting the Twitter **firehose**, which is a 1 percent random sampling of all tweets being tweeted.
 4. You can set `TwitterAgent.sources.Twitter.logging` to true to log the text of each tweet in the log file. However, setting this to true can rapidly fill your disk with log messages. Setting to false still logs normal operation of flume.
 5. Provide values for the following flume sink parameters:
 	* `TwitterAgent.sinks.Vertica.directory` - The location to save the text files from flume as they arrive. The user who runs the flume process must have write access to this location. If you omit this directory, then a Java exception occurs "Directory may not be null".
