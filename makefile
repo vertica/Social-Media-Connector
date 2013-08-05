@@ -30,13 +30,6 @@ FLUME_CONFIG = $(THIRD_PARTY)/conf/flume.conf
 
 BUILD_DIR ?= dist
 
-
-# 
-# Paths used for rpm creation
-#
-RPM_STAGE_DIR ?= dist/vertica-social-media-connector-$(VERSION)
-RPM_STAGE_DIR_FULL_PATH = $(shell readlink -f $(RPM_STAGE_DIR))
-
 ORIGINAL_FLUME = $(BUILD_DIR)/apache-flume-1.3.1-bin
 ORIGINAL_FLUME_TAR = $(THIRD_PARTY)/dist/apache-flume-1.3.1-bin.tar.gz
 
@@ -111,26 +104,6 @@ install: $(PARSER_LIBNAME) ddl/install.sql
 uninstall: ddl/uninstall.sql
 	VTweet_LIBFILE="`readlink -f $(PARSER_LIBNAME)`" $(VSQL) -f ddl/uninstall.sql
 
-rpm_prep:
-	@mkdir -p rpmbuild/{SOURCES,RPMS/x86_64,BUILD,SRPMS}
-	@echo -n "Create RPM binary tarball ..."
-	@mkdir -p                            $(RPM_STAGE_DIR_FULL_PATH)/{lib,ddl,examples}
-	@install -m 755 examples/*.sql       $(RPM_STAGE_DIR_FULL_PATH)/examples/
-	@install -m 755 ddl/*.sql            $(RPM_STAGE_DIR_FULL_PATH)/ddl/
-	@install -m 755 lib/*                $(RPM_STAGE_DIR_FULL_PATH)/lib/
-	@install -m 644 README.md            $(RPM_STAGE_DIR_FULL_PATH)/
-	@tar -C dist -czf rpmbuild/SOURCES/vertica-social-media-connector-$(VERSION).tar.gz vertica-social-media-connector-$(VERSION)
-	@echo "Done."
-
-rpm: rpm_prep
-	rpmbuild --ba       \
-             --define "_topdir $(PWD)/rpmbuild" \
-             --define "version $(VERSION)"  \
-             --define "release $(RELEASE)"  \
-            $(PWD)/rpmbuild/SPECS/vertica-social-media-connector.spec
-	file $(PWD)/rpmbuild/RPMS/x86_64/vertica-social-media-connector-$(VERSION)-$(RELEASE).x86_64.rpm
-
-
 # run examples
 test:
 	$(VSQL) -f examples/example.sql
@@ -147,4 +120,3 @@ realclean:
 	rm -rf $(INSTALL_DIR)
 	rm -rf $(BUILD_DIR)
 	rm -rf dist
-	rm -rf rpmbuild/{SOURCES,RPMS,SRPMS}
