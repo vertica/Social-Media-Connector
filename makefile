@@ -33,9 +33,6 @@ BUILD_DIR ?= dist
 ORIGINAL_FLUME = $(BUILD_DIR)/apache-flume-1.3.1-bin
 ORIGINAL_FLUME_TAR = $(THIRD_PARTY)/dist/apache-flume-1.3.1-bin.tar.gz
 
-JDK16 ?= $(THIRD_PARTY)/dist/jdk1.6.0_11
-JAVA_HOME = $(JDK16)
-
 JAVA_SRCS := $(shell find src/ -name *.java)
 NEW_LIBFILES := $(shell find third-party/lib -name *.jar -printf '%p:')
 
