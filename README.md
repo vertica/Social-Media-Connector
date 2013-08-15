@@ -21,8 +21,8 @@ order for us to accept your pull request you MUST sign and send a copy
 of the appropriate Contributor License Agreement to Vertica
 (contribs@vertica.com):
 
-license/PersonalCLA.pdf: If you are contributing for yourself
-license/CorporateCLA.pdf: If you are contributing on behalf of your company
+* license/PersonalCLA.pdf: If you are contributing for yourself
+* license/CorporateCLA.pdf: If you are contributing on behalf of your company
 
 Overview
 --------
@@ -64,7 +64,7 @@ Obtain Third-party Dependencies
 	* Required package: apache-flume-1.3.1-bin.tar.gz
 
 * JDK:
-	* a Fulle 1.6 JDK is required. The java-1.6.0-openjdk-devel package is acceptable.
+	* a Full 1.6 JDK is required. The java-1.6.0-openjdk-devel package is acceptable.
 
 Prepare Third-party Software
 ----------------------------
