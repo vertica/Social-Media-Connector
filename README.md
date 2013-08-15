@@ -35,7 +35,7 @@ Requirements
 The HP Vertica Social Media Connector requires the following:
 
 * HP Vertica Version 6.1.2 - For platform requirements see: [Platform Requirements](http://my.vertica.com/docs/6.1.x/HP_Vertica_EE_6.1.x_Supported_Platforms.pdf)
-* Oracle Open Java JDK 1.6
+* Full 1.6 JDK (java-1.6.0-openjdk-devel)
 * Apache Flume 1.3.1
 * JSONCpp 0.6.0 RC2
 * SCONS Local 2.3.0
@@ -64,20 +64,13 @@ Obtain Third-party Dependencies
 	* Required package: apache-flume-1.3.1-bin.tar.gz
 
 * JDK:
-	* Project homepage: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-	* Required package: jdk-6u11-linux-x64.bin
+	* a Fulle 1.6 JDK is required. The java-1.6.0-openjdk-devel package is acceptable.
 
 Prepare Third-party Software
 ----------------------------
 1. Make a `dist` directory in `Social-Media-Connector/third-party`.
 2. Copy each of the required packages to the third-party/dist directory. Do not unzip or untar the packages.
-3. Expand the jdk-6u11 package (you will need to accept the license agreement):
-	
-	```
-	cd dist
-	sh ./jdk-6u11-linux-x64.bin
-	```
-4. In the third-party directory type `make`.
+3. In the third-party directory type `make`.
 
 Configuring Your Twitter Account
 ---------------------------------
@@ -127,9 +120,7 @@ You must edit the Flume configuration file and provide details for your Twitter 
 Building and Installing
 -----------------------
 
-Flume requires Oracle Open JDK 1.6, which you downloaded from Oracle. Verify that the JDK bin directory is in your path before building or the build fails. To add it to your path:
-`export PATH=$PATH:/home/dbadmin/Social-Media-Connector/third-party/dist/jdk1.6.0_11/bin`
-
+The Flume build requires a 1.6 full JDK. To install on RedHat based systems, use the command `yum install java-1.6.0-openjdk-devel`. Verify that the path to javac in your path before building or the build fails. 
 Navigate to the top level directory of the Social Media Connector and run: 'make flume'
 
 After the build completes, run 'make install' if the HP Vertica database exists on the same host and you are logged in as a dbadmin user. Otherwise, copy the VTweetParser.so file over to your Vertica node and install the library:
@@ -140,6 +131,18 @@ CREATE LIBRARY VTweetLib AS /path/to/VTweetParser.so;
 CREATE PARSER TweetParser AS LANGUAGE 'C++' NAME 'TweetParserFactory' LIBRARY VTweetLib NOT FENCED;
 
 ```
+
+Proxy Server Configuration for Flume
+------------------------------------
+
+If you must use a proxy server to connect to Twitter, then edit 'Social-Media-Connector/dist/apache-flume-1.3.1-bin/flume-ng-agent' and add the following arguments:
+
+* `-Dtwitter4j.http.proxyHost=` _host_ 
+* `-Dtwitter4j.http.proxyPort=` _port_
+* `-Dtwitter4j.http.proxyUser=` _username_ (if required)
+* `-Dtwitter4j.http.proxyPassword=` _password_ (if required)
+* 
+Replace _host_, _port_, _username_, and _password_ with values for your network.
 
 
 Creating Tables for Tweets
@@ -270,15 +273,6 @@ When querying tweet tables, it is useful to filter on the lang attribute so that
 
 Troubleshooting
 ----------------
-
-### Proxy Server
-
-If you must use a proxy server to connect to Twitter, then edit 'Social-Media-Connector/dist/apache-flume-1.3.1-bin/flume-ng-agent' and add the following arguments:
-
-* `-Dtwitter4j.http.proxyHost=_host_` 
-* `-Dtwitter4j.http.proxyPort=_port_`
-* `-Dtwitter4j.http.proxyUser=_username_` (if required)
-* `-Dtwitter4j.http.proxyPassword=_password_` (if required)
 
 ### Testing TweetParser()
 
