@@ -1,1 +1,1 @@
-create table tweets(id int, created_at varchar(144), "user.name" varchar(144), "user.screen_name" varchar(144), text varchar(500), retweet_count int, "user.location" varchar(144), "coordinates.coordinates.0" numeric, "coordinates.coordinates.1" float, lang varchar(5));
+create table tweets(id int, created_at timestamptz, "user.name" varchar(144), "user.screen_name" varchar(144), text varchar(500), retweet_count int, "user.location" varchar(144), "coordinates.coordinates.0" numeric, "coordinates.coordinates.1" float, lang varchar(5));
