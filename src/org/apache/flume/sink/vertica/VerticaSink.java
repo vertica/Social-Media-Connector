@@ -84,6 +84,7 @@ public class VerticaSink extends AbstractSink implements Configurable {
   private String parserName;
   
   private int eventAttemptCounter;
+  private boolean cleanupFiles;
 
   public VerticaSink() {
     pathController = new PathManager();
@@ -149,6 +150,9 @@ public class VerticaSink extends AbstractSink implements Configurable {
         logger.error(e.getMessage());
         return;
     }
+    
+    // read config for whether to delete files after loading into Vertica
+    cleanupFiles = context.getBoolean("cleanup", true);
   }
 
   @Override
@@ -204,9 +208,10 @@ public class VerticaSink extends AbstractSink implements Configurable {
           shouldRotate = false;
           
           // build sql command to copy tweets into Vertica
+          File currentFile = pathController.getCurrentFile();
           String sqlCommand = "copy " + tableName + " from local '" + 
-        		  pathController.getCurrentFile() + "' parser " + parserName + "();";
-          Runnable r = new CopyThread(conn, sqlCommand);
+        		  currentFile + "' parser " + parserName + "();";
+          Runnable r = new CopyThread(conn, currentFile, sqlCommand);
           new Thread(r).start();
 
         } catch (IOException e) {
@@ -296,11 +301,14 @@ public class VerticaSink extends AbstractSink implements Configurable {
         outputStream.close();
 
         // build sql command to copy tweets into Vertica
+        File currentFile = pathController.getCurrentFile();
         String sqlCommand = "copy " + tableName + " from local '" +
-	    pathController.getCurrentFile() + "' parser " + parserName + "();";
+	     	currentFile + "' parser " + parserName + "();";
 	try {
 	    Statement stmt = conn.createStatement();
 	    stmt.execute(sqlCommand);
+	    if (cleanupFiles)
+	    	currentFile.delete();
 	} catch (SQLException e) {
 	    // Could not connect to database.
 	    System.err.println("Could not connect to database.");
@@ -354,16 +362,20 @@ public class VerticaSink extends AbstractSink implements Configurable {
   class CopyThread implements Runnable {
 	  private String sqlCommand;
 	  private Connection conn;
+	  private File currentFile;
 
-	  public CopyThread(Connection conn, String sqlCommand) {
+	  public CopyThread(Connection conn, File currentFile, String sqlCommand) {
 		  this.conn = conn;
 		  this.sqlCommand = sqlCommand;	
+		  this.currentFile = currentFile;
 	  }
 
 	  public void run() {
 		  try {
 			  Statement stmt = conn.createStatement();
 			  stmt.execute(sqlCommand);
+			  if (cleanupFiles)
+				  currentFile.delete();
 		  } catch (SQLException e) {
 			  // Could not connect to database.
 			  System.err.println("Could not connect to database.");
