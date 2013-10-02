@@ -94,7 +94,6 @@ public class VerticaSink extends AbstractSink implements Configurable {
 	} catch (ClassNotFoundException e) {
 		// Could not find the driver class. Likely an issue
 		// with finding the .jar file.
-		System.err.println("Could not find the JDBC driver class.");
 		e.printStackTrace();
 		return; // Exit. Cannot do anything further.
 	}
@@ -146,7 +145,6 @@ public class VerticaSink extends AbstractSink implements Configurable {
     			"jdbc:vertica://" + hostname + ":" + port + "/" + dbName, myProp);
     }  catch (SQLException e) {
         // Could not connect to database.
-        System.err.println("Could not connect to database.");
         logger.error(e.getMessage());
         return;
     }
@@ -311,7 +309,6 @@ public class VerticaSink extends AbstractSink implements Configurable {
 	    	currentFile.delete();
 	} catch (SQLException e) {
 	    // Could not connect to database.
-	    System.err.println("Could not connect to database.");
 	    logger.error(e.getMessage());
 	}
 
@@ -378,7 +375,6 @@ public class VerticaSink extends AbstractSink implements Configurable {
 				  currentFile.delete();
 		  } catch (SQLException e) {
 			  // Could not connect to database.
-			  System.err.println("Could not connect to database.");
 			  logger.error(e.getMessage());
 		  }
 	  }
