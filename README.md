@@ -115,6 +115,8 @@ You must edit the Flume configuration file and provide details for your Twitter 
 	* `TwitterAgent.sinks.Vertica.port` - HP Vertica Database Port. Default is 5433.
 	* `.databasename`, `.username`, `.password` - The database and credentials required to access the database.
 	* `TwitterAgent.sinks.Vertica.tableName` - The table name into which the tweets are loaded. Provide the name now, you will create the table in HP Vertica later.
+	* 
+	Note: The parameter `TwitterAgent.sinks.Vertica.cleanup` removes the JSON files stored in the `TwitterAgent.sinks.Vertica.directory` directory after the data is loaded into HP Vertica. If you want to retain those files, then change the value to _false_. Note that you may eventually fill up your filesystem with JSON files if you do not manually prune the files on a regular basis.
 
 
 Building and Installing
