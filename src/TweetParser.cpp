@@ -230,7 +230,7 @@ public:
             PlanContext &planCtxt,
             const SizedColumnTypes &returnType) {
 
-        return vt_createFuncObj(srvInterface.allocator, TweetParser, returnType);
+        return vt_createFuncObject<TweetParser>(srvInterface.allocator, returnType);
     }
 
     virtual void getParserReturnType(ServerInterface &srvInterface,
@@ -238,7 +238,9 @@ public:
             PlanContext &planCtxt,
             const SizedColumnTypes &argTypes,
             SizedColumnTypes &returnType) {
-        returnType = argTypes;
+        for (int i = 0; i < argTypes.getColumnCount(); i++) {
+            returnType.addArg(argTypes.getColumnType(i), argTypes.getColumnName(i));
+        }
     }
 };
 RegisterFactory(TweetParserFactory);
