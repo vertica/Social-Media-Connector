@@ -103,8 +103,8 @@ You must edit the Flume configuration file and provide details for your Twitter 
 	* `TwitterAgent.sources.Twitter.accessToken` = **Access token** value
 	* `TwitterAgent.sources.Twitter.accessTokenSecret` = **Access token secret** value
 3. Specify `TwitterAgent.sources.Twitter.keywords` and/or `TwitterAgent.sources.Twitter.follow`: 
-	* If you specify the _keywords_ value, then Flume returns tweets that contain those keywords. If you want to use hashtags, omit the # sign from the word. Use a comma separated list. For example: hockey, stanley cup, playoffs
-	* If you specify the _follow_ value, then Flume returns tweets from those users. User a comma separated list of screen names.If you specify _follow_, and _keywords_ is not assigned a value, then you get all tweets from the user(s). If _keywords_ is also defined, then you  get tweets from the user(s) defined in _follow_, and tweets from ***all*** users that contain the keywords in _keywords_.
+	* If you specify the _keywords_ value, then Flume returns tweets that contain those keywords. If you want to use hashtags, omit the # sign from the word. Use a comma separated list. For example: hockey, stanley cup, playoffs. Note that you are limited to 200 keywords in the list.
+	* If you specify the _follow_ value, then Flume returns tweets from those users. User a comma separated list of screen names.If you specify _follow_, and _keywords_ is not assigned a value, then you get all tweets from the user(s). If _keywords_ is also defined, then you  get tweets from the user(s) defined in _follow_, and tweets from ***all*** users that contain the keywords in _keywords_. Note that you are limited to 400 screen names in the list.
 	* Ommitting both _keywords_ and _follow_ settings results in getting the Twitter **firehose**, which is a 1 percent random sampling of all tweets being tweeted.
 4. You can set `TwitterAgent.sources.Twitter.logging` to true to log the text of each tweet in the log file. However, setting this to true can rapidly fill your disk with log messages. Setting to false still logs normal operation of flume.
 5. Provide values for the following flume sink parameters:
