@@ -34,7 +34,7 @@ Requirements
 ------------
 The HP Vertica Social Media Connector requires the following:
 
-* HP Vertica Version 6.1.2 - For platform requirements see: [Platform Requirements](http://my.vertica.com/docs/6.1.x/HP_Vertica_EE_6.1.x_Supported_Platforms.pdf)
+* HP Vertica Version 6.1.2+ or 7.0.x - For platform requirements see: [Platform Requirements for 6.1.x](http://my.vertica.com/docs/6.1.x/HP_Vertica_EE_6.1.x_Supported_Platforms.pdf) or [Platform Requirements for 7.0.x](https://my.vertica.com/docs/7.0.x/HTML/index.htm#Authoring/SupportedPlatforms/SupportedPlatforms.htm)
 * Full 1.6 JDK (java-1.6.0-openjdk-devel)
 * Apache Flume 1.3.1
 * JSONCpp 0.6.0 RC2
