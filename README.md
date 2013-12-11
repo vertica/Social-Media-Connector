@@ -103,8 +103,8 @@ You must edit the Flume configuration file and provide details for your Twitter 
 	* `TwitterAgent.sources.Twitter.accessToken` = **Access token** value
 	* `TwitterAgent.sources.Twitter.accessTokenSecret` = **Access token secret** value
 3. Specify `TwitterAgent.sources.Twitter.keywords` and/or `TwitterAgent.sources.Twitter.follow`: 
-	* If you specify the _keywords_ value, then Flume returns tweets that contain those keywords. If you want to use hashtags, omit the # sign from the word. Use a comma separated list. For example: hockey, stanley cup, playoffs
-	* If you specify the _follow_ value, then Flume returns tweets from those users. User a comma separated list of screen names.If you specify _follow_, and _keywords_ is not assigned a value, then you get all tweets from the user(s). If _keywords_ is also defined, then you  get tweets from the user(s) defined in _follow_, and tweets from ***all*** users that contain the keywords in _keywords_.
+	* If you specify the _keywords_ value, then Flume returns tweets that contain those keywords. If you want to use hashtags, omit the # sign from the word. Use a comma separated list. For example: hockey, stanley cup, playoffs. Note that you are limited to 200 keywords in the list.
+	* If you specify the _follow_ value, then Flume returns tweets from those users. User a comma separated list of screen names.If you specify _follow_, and _keywords_ is not assigned a value, then you get all tweets from the user(s). If _keywords_ is also defined, then you  get tweets from the user(s) defined in _follow_, and tweets from ***all*** users that contain the keywords in _keywords_. Note that you are limited to 400 screen names in the list.
 	* Ommitting both _keywords_ and _follow_ settings results in getting the Twitter **firehose**, which is a 1 percent random sampling of all tweets being tweeted.
 4. You can set `TwitterAgent.sources.Twitter.logging` to true to log the text of each tweet in the log file. However, setting this to true can rapidly fill your disk with log messages. Setting to false still logs normal operation of flume.
 5. Provide values for the following flume sink parameters:
@@ -291,7 +291,7 @@ The Flume log rolls over when it reaches a certain size and the old log is gzipp
 
 ### Modifying flume.conf
 
-You can modify your flume config file by editing `dist/apache-flume-1.3.1-bin/conf/flume.conf`. You do not need to restart Flume. Flume automatically picks up the changes in your flume.conf file after a short interval. Consult the flume.log file to verify the changes were valid and were applied. Note that if you rebuild Flume, then the flume.conf file from `third-party/conf` is copied over the flume.conf in `dist/apache-flume-1.3.1-bin/conf/flume.conf`.
+You can modify your flume config file by editing `dist/apache-flume-1.3.1-bin/conf/flume.conf`. However, you must first stop flume using the start-stop script (`start-stop stop TwitterAgent`). If you do not stop flume prior to modifying flume.conf, then you may receive double results for tweets that match both the old config and the new config. Stop and start flume to correct this. Consult the flume.log file to verify the changes were valid and were applied. Note that if you rebuild Flume, then the flume.conf file from `third-party/conf` is copied over the flume.conf in `dist/apache-flume-1.3.1-bin/conf/flume.conf`.
 
 ### Malformed Tweets
 If tweets come in malformed, or are malformed in a tweet file that you are importing directly using TweetParser() in vsql, then the malformed tweets are not loaded into Vertica. The tweets that are not loaded are logged in the `CopyErrorLogs` directory, for example: `/home/dbadmin/exampledb/catalog/exampledb/v_exampledb_node0004_catalog/CopyErrorLogs/`
