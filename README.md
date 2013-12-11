@@ -291,7 +291,7 @@ The Flume log rolls over when it reaches a certain size and the old log is gzipp
 
 ### Modifying flume.conf
 
-You can modify your flume config file by editing `dist/apache-flume-1.3.1-bin/conf/flume.conf`. However, you must first stop f;ume using the start-stop script (start-stop stop TwitterAgent). If you do not stop flume prior to modifying flume.conf, then you may receive double results for tweets that match both the old config and the new config. Stop and start flume to correct this. Consult the flume.log file to verify the changes were valid and were applied. Note that if you rebuild Flume, then the flume.conf file from `third-party/conf` is copied over the flume.conf in `dist/apache-flume-1.3.1-bin/conf/flume.conf`.
+You can modify your flume config file by editing `dist/apache-flume-1.3.1-bin/conf/flume.conf`. However, you must first stop flume using the start-stop script (`start-stop stop TwitterAgent`). If you do not stop flume prior to modifying flume.conf, then you may receive double results for tweets that match both the old config and the new config. Stop and start flume to correct this. Consult the flume.log file to verify the changes were valid and were applied. Note that if you rebuild Flume, then the flume.conf file from `third-party/conf` is copied over the flume.conf in `dist/apache-flume-1.3.1-bin/conf/flume.conf`.
 
 ### Malformed Tweets
 If tweets come in malformed, or are malformed in a tweet file that you are importing directly using TweetParser() in vsql, then the malformed tweets are not loaded into Vertica. The tweets that are not loaded are logged in the `CopyErrorLogs` directory, for example: `/home/dbadmin/exampledb/catalog/exampledb/v_exampledb_node0004_catalog/CopyErrorLogs/`
