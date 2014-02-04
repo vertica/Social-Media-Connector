@@ -227,21 +227,22 @@ Tweets are limited to 140 characters. Some Twitter users add text to tweets that
 The following is a sample table definition that captures most of the basic information available in the data returned by Flume.
 ```
 create table tweets(
-	id int,
-	created_at timestamptz,
-	"user.name" varchar(144),
-	"user.screen_name" varchar(144),
-	text varchar(500),
-	"retweeted_status.retweet_count" int,
-	"retweeted_status.id" int,
-	"retweeted_status.favorite_count" int,
-	"retweeted_status.text" varchar(500),
-	"user.location" varchar(144),
-	"coordinates.coordinates.0" float,
-	"coordinates.coordinates.1" float,
-	"entities.hashtags.0.text" VARCHAR(144),
-	"entities.hashtags.1.text" VARCHAR(144),
-	lang varchar(5)
+    id int,
+    created_at timestamptz,
+    "user.name" varchar(144),
+    "user.screen_name" varchar(144),
+    "user.followers_count" int,
+    text varchar(500),
+    "retweeted_status.retweet_count" int,
+    "retweeted_status.id" int,
+    "retweeted_status.favorite_count" int,
+    "retweeted_status.text" varchar(500),
+    "user.location" varchar(144),
+    "coordinates.coordinates.0" float,
+    "coordinates.coordinates.1" float,
+    "entities.hashtags.0.text" VARCHAR(144),
+    "entities.hashtags.1.text" VARCHAR(144),
+    lang varchar(5)
 );
 
 ```
