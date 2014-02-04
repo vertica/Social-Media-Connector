@@ -22,6 +22,14 @@ private:
         VerticaType vtype = returnType.getColumnType(column);
         const BaseDataOID typeOid = vtype.getTypeOid();
         switch (typeOid) {
+        case BoolOID:
+        {
+            if (result.isBool())
+                writer->setBool(column, result.asBool());
+            else
+                writer->setNull(column);
+            break;
+        }
         case Int8OID:
         {
 	    if (result.isUInt())
