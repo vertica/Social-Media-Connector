@@ -246,7 +246,7 @@ public:
             PlanContext &planCtxt,
             const SizedColumnTypes &argTypes,
             SizedColumnTypes &returnType) {
-        for (int i = 0; i < argTypes.getColumnCount(); i++) {
+        for (uint i = 0; i < argTypes.getColumnCount(); i++) {
             returnType.addArg(argTypes.getColumnType(i), argTypes.getColumnName(i));
         }
     }
