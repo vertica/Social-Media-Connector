@@ -277,6 +277,15 @@ When querying tweet tables, it is useful to filter on the lang attribute so that
 Troubleshooting
 ----------------
 
+### Twitter Returns 403 - SSL is Required code - 92 Error
+
+If Twitter is returning the error:
+> 403:The request is understood, but it has been refused. An accompanying error message will explain why. This code is used when requests are being denied due to update limits (https://support.twitter.com/articles/15364-about-twitter-limits-update-api-dm-and-following).message - SSL is required code - 92
+	
+Then, enable SSL by editing `SocialMediaConnector-master/dist/apache-flume-1.3.1-bin/flume-ng-agent` and adding the following property to the last line in the file:
+
+`-Dtwitter4j.http.useSSL=true`
+
 ### Testing TweetParser()
 
 You can test TweetParser() by manually calling it in vsql with the name of one of the data files downloaded by Flume. For example:
